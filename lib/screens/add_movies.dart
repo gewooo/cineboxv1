@@ -14,7 +14,6 @@ class AddMovies extends StatefulWidget {
 class _AddMoviesState extends State<AddMovies> {
   final DbHelper movieDb = DbHelper.instance;
   final titleCtrl = TextEditingController();
-  final yearCtrl = TextEditingController();
   final genreCtrl = TextEditingController();
   final imgCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
@@ -24,27 +23,23 @@ class _AddMoviesState extends State<AddMovies> {
     'Cartoon',
     'Comedy',
     'Drama',
-    'Fantasy',
-    'Science Fiction',
     'Horror',
-    'Paranormal',
-    'Romance',
-    'Reality TV',
+    'Historical',
     'Musical',
-    'Other'
+    'Romance',
+    'Crime'
   ];
 
   final List<String> statuses = ['To Watch', 'Watched'];
-
   String? selectedStatus;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Add Movie',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 233, 33, 19),
       ),
@@ -54,7 +49,7 @@ class _AddMoviesState extends State<AddMovies> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               TextField(
                 controller: titleCtrl,
                 decoration: InputDecoration(
@@ -65,16 +60,18 @@ class _AddMoviesState extends State<AddMovies> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[400]!),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 ),
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               DropdownButtonFormField<String>(
                 value: genreCtrl.text.isEmpty ? null : genreCtrl.text,
                 isExpanded: false,
@@ -86,13 +83,15 @@ class _AddMoviesState extends State<AddMovies> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[400]!),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 ),
                 items: genres.map((String genre) {
                   return DropdownMenuItem<String>(
@@ -106,28 +105,7 @@ class _AddMoviesState extends State<AddMovies> {
                   });
                 },
               ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: yearCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Year of Release',
-                  labelStyle: TextStyle(color: Colors.grey[700]),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[400]!),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               DropdownButtonFormField<String>(
                 value: selectedStatus,
                 decoration: InputDecoration(
@@ -138,13 +116,15 @@ class _AddMoviesState extends State<AddMovies> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[400]!),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 ),
                 items: statuses.map((String status) {
                   return DropdownMenuItem<String>(
@@ -158,27 +138,29 @@ class _AddMoviesState extends State<AddMovies> {
                   });
                 },
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               TextField(
                 controller: imgCtrl,
                 decoration: InputDecoration(
-                  labelText: 'Image URL (Optional)',
+                  labelText: 'Add an Image  (Optional)',
                   labelStyle: TextStyle(color: Colors.grey[700]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[400]!),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 ),
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
               TextField(
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
@@ -191,13 +173,15 @@ class _AddMoviesState extends State<AddMovies> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Colors.grey[400]!),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 ),
               ),
               SizedBox(height: 30),
@@ -230,7 +214,6 @@ class _AddMoviesState extends State<AddMovies> {
   void addToList() async {
     if (titleCtrl.text.isEmpty ||
         genreCtrl.text.isEmpty ||
-        yearCtrl.text.isEmpty ||
         selectedStatus == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all required fields')),
@@ -241,7 +224,6 @@ class _AddMoviesState extends State<AddMovies> {
     final movie = MovieDetails(
       title: titleCtrl.text,
       genre: genreCtrl.text,
-      year: int.tryParse(yearCtrl.text) ?? 0,
       status: selectedStatus!,
       imageUrl: imgCtrl.text.isNotEmpty ? imgCtrl.text : null,
       description:
@@ -259,3 +241,4 @@ class _AddMoviesState extends State<AddMovies> {
     Navigator.pop(context);
   }
 }
+
