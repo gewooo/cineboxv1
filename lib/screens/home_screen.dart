@@ -27,16 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void updateMovieStatus(MovieDetails movie) {
-  setState(() {
-    // Update the status of the selected movie
-    movie.status = 'Watched';
-  });
-}
-
-
   // Fetch movies from the database
-void getMovies() async {
+  void getMovies() async {
     List<MovieDetails> movieList = await movieDb.getMovies();
     setState(() {
       movies = movieList;
@@ -64,12 +56,14 @@ void getMovies() async {
     });
   }
 
-  // Filter movies based on search query
-void filterMovies() {
+  // Filter movies based on search query and selected tab
+  void filterMovies() {
     setState(() {
       filteredMovies = movies
           .where((movie) =>
-              (movie.title.toLowerCase().contains(searchCtrl.text.toLowerCase())) &&
+              (movie.title
+                  .toLowerCase()
+                  .contains(searchCtrl.text.toLowerCase())) &&
               (selectedStatus == 'All' || movie.status == selectedStatus))
           .toList();
     });
@@ -96,205 +90,179 @@ void filterMovies() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 233, 33, 19),
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return DefaultTabController(
+      length: 3, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 233, 33, 19),
+          elevation: 0,
+          title: const Text(
+            'CineBox',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+          bottom: TabBar(
+            onTap: (index) {
+              setState(() {
+                switch (index) {
+                  case 0:
+                    selectedStatus = 'All';
+                    break;
+                  case 1:
+                    selectedStatus = 'To Watch';
+                    break;
+                  case 2:
+                    selectedStatus = 'Watched';
+                    break;
+                }
+                filterMovies(); // Update filtered movies on tab change
+              });
+            },
+            tabs: const [
+              Tab(text: 'All'),
+              Tab(text: 'To Watch'),
+              Tab(text: 'Watched'),
+            ],
+            indicatorColor: Colors.white,
+            labelColor: Colors.white, // Text color for the selected tab
+            unselectedLabelColor:
+                Colors.white70, // Text color for unselected tabs
+          ),
+        ),
+        body: Column(
           children: [
-            const Text(
-              'CineBox',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: searchCtrl,
+                decoration: InputDecoration(
+                  hintText: 'Search movies...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
+            ),
+            Expanded(
+              child: filteredMovies.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.movie_creation_outlined,
+                            size: 80,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'No movies found!',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 300,
+                        childAspectRatio: 3 / 2,
+                      ),
+                      itemCount: filteredMovies.length,
+                      itemBuilder: (context, index) {
+                        final movie = filteredMovies[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GridTile(
+                            child: GestureDetector(
+                              onTap: () => viewDetails(movie, context),
+                              child: movie.imageUrl == null ||
+                                      movie.imageUrl!.isEmpty
+                                  ? Image.asset(
+                                      'assets/images/default.png',
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      movie.imageUrl!,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                            footer: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 4.0),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(123, 0, 0, 0),
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      movie.title,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      movie.status,
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: movie.status == 'Watched'
+                                            ? Colors.greenAccent
+                                            : Colors.amberAccent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
             ),
           ],
         ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchCtrl,
-                    decoration: InputDecoration(
-                      hintText: 'Search movies...',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                DropdownButton<String>(
-                  value: selectedStatus,
-                  icon: const Icon(Icons.filter_list),
-                  iconSize: 24,
-                  style: const TextStyle(color: Colors.black),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedStatus = newValue;
-                      filterMovies(); // Trigger filtering when status is changed
-                    });
-                  },
-                  items: <String>['All', 'To Watch', 'Watched']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: filteredMovies.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.movie_creation_outlined,
-                          size: 80,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'No movies found!',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 300,
-                      childAspectRatio: 3/2,
-                      // crossAxisSpacing: 10,
-                    ),
-                    itemCount: filteredMovies.length,
-                    itemBuilder: (context, index) {
-                      final movie = filteredMovies[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GridTile(
-                          child: GestureDetector(
-                            onTap: () => viewDetails(movie, context),
-                            child: movie.imageUrl == null || movie.imageUrl!.isEmpty
-                                ? Image.asset(
-                                    'assets/images/default.png',
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.network(
-                                    movie.imageUrl!,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                          footer: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(123, 0, 0, 0),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(8),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    movie.title,
-                                    overflow: TextOverflow.ellipsis, // Ensure the text doesn't overflow
-                                    maxLines: 1, // Limit to one line
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8), // Add spacing between title and status
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    movie.status,
-                                    textAlign: TextAlign.right, // Align the status to the right
-                                    style: TextStyle(
-                                      color: movie.status == 'Watched'
-                                          ? Colors.greenAccent
-                                          : Colors.amberAccent,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddMovies(addlist: addToMovies),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 233, 33, 19),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 12,
-                    ),
-                  ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    'Add Movie',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Poppins'),
-                  ),
-                ],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 233, 33, 19),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddMovies(addlist: addToMovies),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+          child: Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }
 }
+
