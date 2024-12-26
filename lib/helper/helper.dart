@@ -4,12 +4,11 @@ import 'package:path/path.dart';
 import 'dart:async';
 
 class DbHelper {
-  static const dbName = 'cinebox_v1.db';
+  static const dbName = 'cineboxv1.db';
   static const dbVersion = 1;
   static const tableName = 'movies';
   static const colTitle = 'movieTitle';
   static const colGenre = 'movieGenre';
-  static const colYear = 'movieYear';
   static const colStatus = 'movieStatus';
   static const colDescription = 'movieDescription';
   static const colImageUrl = 'movieImageUrl';
@@ -25,8 +24,7 @@ class DbHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), dbName);
-    return await openDatabase(path,
-        version: dbVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: dbVersion, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -35,7 +33,6 @@ class DbHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         $colTitle TEXT NOT NULL,
         $colGenre TEXT NOT NULL,
-        $colYear INTEGER NOT NULL,
         $colStatus TEXT NOT NULL,
         $colDescription TEXT,
         $colImageUrl TEXT
@@ -74,4 +71,7 @@ class DbHelper {
       whereArgs: [id],
     );
   }
+
+  getAllMovies() {}
 }
+
