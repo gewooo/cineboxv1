@@ -54,7 +54,7 @@ class _ViewmovieState extends State<Viewmovie> {
             ),
             SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: 100,
@@ -91,6 +91,7 @@ class _ViewmovieState extends State<Viewmovie> {
                     ],
                   ),
                 ),
+                SizedBox(width: 20,),
                 // Status
                 Container(
                   width: 100, // Adjust width as needed
