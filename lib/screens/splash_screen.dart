@@ -15,7 +15,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() {
-    Timer(const Duration(seconds: 5), () {
+    Timer(Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -28,14 +28,20 @@ class SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 233, 33, 19),
       body: Center(
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/CineBox_2.png',
-              width: 500,
-              height: 500,
+              'assets/images/POPCORN.png',
             ),
+            Text(
+              'CineBox',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+              ),
+            )
           ],
         ),
       ),

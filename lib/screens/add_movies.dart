@@ -140,9 +140,11 @@ class _AddMoviesState extends State<AddMovies> {
               ),
               SizedBox(height: 15),
               TextField(
-                controller: imgCtrl,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                controller: descriptionCtrl,
                 decoration: InputDecoration(
-                  labelText: 'Add an Image  (Optional)',
+                  labelText: 'Description (Optional)',
                   labelStyle: TextStyle(color: Colors.grey[700]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -162,11 +164,9 @@ class _AddMoviesState extends State<AddMovies> {
               ),
               SizedBox(height: 15),
               TextField(
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: descriptionCtrl,
+                controller: imgCtrl,
                 decoration: InputDecoration(
-                  labelText: 'Description (Optional)',
+                  labelText: 'Add an Image URL (Optional)',
                   labelStyle: TextStyle(color: Colors.grey[700]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -216,7 +216,7 @@ class _AddMoviesState extends State<AddMovies> {
         genreCtrl.text.isEmpty ||
         selectedStatus == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields')),
+        SnackBar(content: Text('Please fill in all required fields')),
       );
       return;
     }
@@ -230,13 +230,10 @@ class _AddMoviesState extends State<AddMovies> {
           descriptionCtrl.text.isNotEmpty ? descriptionCtrl.text : null,
     );
 
-    // Insert movie into the database
     int id = await DbHelper.instance.insertMovie(movie);
 
-    // Update the movie object with the generated id
     movie.id = id;
 
-    // Pass the movie back to the parent widget
     widget.addlist(movie);
     Navigator.pop(context);
   }

@@ -2,7 +2,7 @@ import 'package:cinebox/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const CineBox());
+  runApp(CineBox());
 }
 
 class CineBox extends StatelessWidget {
@@ -15,10 +15,8 @@ class CineBox extends StatelessWidget {
         fontFamily: 'Poppins',
         primaryColor: Colors.white,
         appBarTheme: AppBarTheme(
-          color: Colors.red,
-      iconTheme: IconThemeData(
-        color: Colors.white
-      ),
+          color: Color.fromARGB(255, 233, 33, 19),
+          iconTheme: IconThemeData(color: Colors.white),
         ),
       ),
       debugShowCheckedModeBanner: false,

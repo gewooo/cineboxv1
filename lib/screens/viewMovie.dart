@@ -62,7 +62,7 @@ class _ViewmovieState extends State<Viewmovie> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                      color: const Color.fromARGB(255, 149, 149, 149),
+                      color: Color.fromARGB(255, 149, 149, 149),
                       width: 0.4,
                     ),
                     borderRadius: BorderRadius.circular(12),
@@ -82,7 +82,7 @@ class _ViewmovieState extends State<Viewmovie> {
                       const SizedBox(height: 2),
                       Text(
                         widget.movie.genre,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 45, 44, 44),
@@ -91,17 +91,17 @@ class _ViewmovieState extends State<Viewmovie> {
                     ],
                   ),
                 ),
-                SizedBox(width: 20,),
-                // Status
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
-                  width: 100, // Adjust width as needed
+                  width: 100,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white, // White background
+                    color: Colors.white,
                     border: Border.all(
-                      color: const Color.fromARGB(
-                          255, 149, 149, 149), // Border color
-                      width: 0.5, // Border width
+                      color: Color.fromARGB(255, 149, 149, 149),
+                      width: 0.5,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -125,7 +125,7 @@ class _ViewmovieState extends State<Viewmovie> {
                           fontWeight: FontWeight.bold,
                           color: widget.movie.status == 'Watched'
                               ? Colors.greenAccent
-                              : const Color.fromARGB(255, 224, 206, 43),
+                              : Color.fromARGB(255, 224, 206, 43),
                         ),
                       ),
                     ],
@@ -142,13 +142,11 @@ class _ViewmovieState extends State<Viewmovie> {
               ),
             SizedBox(height: 24),
             Column(
-              crossAxisAlignment: CrossAxisAlignment
-                  .stretch, // Ensures buttons stretch to full width
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (widget.movie.status != "Watched")
                   Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 12), // Adds space below the first button
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: ElevatedButton(
                       onPressed: () => _confirmStatusChange(context),
                       style: ElevatedButton.styleFrom(
@@ -159,8 +157,7 @@ class _ViewmovieState extends State<Viewmovie> {
                         ),
                       ),
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // Centers the row content
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.visibility, color: Colors.white),
                           SizedBox(width: 10),
@@ -173,8 +170,7 @@ class _ViewmovieState extends State<Viewmovie> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      top: 12), // Adds space above the delete button
+                  padding: const EdgeInsets.only(top: 12),
                   child: ElevatedButton(
                     onPressed: () => _confirmDelete(context),
                     style: ElevatedButton.styleFrom(
@@ -185,8 +181,7 @@ class _ViewmovieState extends State<Viewmovie> {
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // Centers the row content
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.delete_forever, color: Colors.white),
                         SizedBox(width: 10),
@@ -214,7 +209,7 @@ class _ViewmovieState extends State<Viewmovie> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          title: const Text(
+          title: Text(
             'Mark as Watched',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -232,12 +227,12 @@ class _ViewmovieState extends State<Viewmovie> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               ),
-              child: const Text(
+              child: Text(
                 'Cancel',
                 style: TextStyle(
                   color: Colors.blue,
@@ -247,20 +242,16 @@ class _ViewmovieState extends State<Viewmovie> {
             ),
             TextButton(
               onPressed: () async {
-                // Update status in the database
                 await DbHelper.instance
                     .updateMovie(widget.movie.id!, 'Watched');
 
-                // Update the movie status locally
                 setState(() {
-                  widget.movie.status =
-                      'Watched'; // Ensure this is a state update
+                  widget.movie.status = 'Watched';
                 });
 
-                // Trigger the status change callback to refresh the UI
                 widget.onStatusChange();
 
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -285,8 +276,7 @@ class _ViewmovieState extends State<Viewmovie> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(15), // Rounded corners for the dialog
+            borderRadius: BorderRadius.circular(15),
           ),
           title: Text(
             'Confirm Delete',
@@ -306,7 +296,7 @@ class _ViewmovieState extends State<Viewmovie> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -321,17 +311,12 @@ class _ViewmovieState extends State<Viewmovie> {
             ),
             TextButton(
               onPressed: () async {
-                // Delete the movie from the database
                 await DbHelper.instance.deleteMovie(widget.movie.id!);
-                widget
-                    .onDelete(); // Call the onDelete function to update the UI
+                widget.onDelete();
 
-                // Close the dialog
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
 
-                // Go back to the previous screen (home screen)
-                Navigator.of(context)
-                    .pop(); // This will pop the current screen (view movie) from the navigation stack
+                Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),

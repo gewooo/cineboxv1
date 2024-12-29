@@ -21,32 +21,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getMovies(); // Load movies on init
+    getMovies();
     searchCtrl.addListener(() {
-      filterMovies(); // Trigger filtering based on the search input
+      filterMovies();
     });
   }
 
-  // Fetch movies from the database
   void getMovies() async {
     List<MovieDetails> movieList = await movieDb.getMovies();
     setState(() {
       movies = movieList;
-      filteredMovies = movieList; // Set filteredMovies to all movies initially
+      filteredMovies = movieList;
     });
   }
 
   void addToMovies(MovieDetails movie) {
     setState(() {
       movies.add(movie);
-      filteredMovies = movies; // Refresh filteredMovies list
+      filteredMovies = movies;
     });
   }
 
   void deleteMovie(MovieDetails movie) {
     setState(() {
       movies.remove(movie);
-      filteredMovies = movies; // Refresh filteredMovies list
+      filteredMovies = movies;
     });
   }
 
@@ -56,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Filter movies based on search query and selected tab
   void filterMovies() {
     setState(() {
       filteredMovies = movies
@@ -91,16 +89,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Number of tabs
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 233, 33, 19),
+          backgroundColor: Color.fromARGB(255, 233, 33, 19),
           elevation: 0,
-          title: const Text(
+          title: Text(
             'CineBox',
             style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -120,18 +117,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedStatus = 'Watched';
                     break;
                 }
-                filterMovies(); // Update filtered movies on tab change
+                filterMovies();
               });
             },
-            tabs: const [
+            tabs: [
               Tab(text: 'All'),
               Tab(text: 'To Watch'),
               Tab(text: 'Watched'),
             ],
             indicatorColor: Colors.white,
-            labelColor: Colors.white, // Text color for the selected tab
-            unselectedLabelColor:
-                Colors.white70, // Text color for unselected tabs
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
           ),
         ),
         body: Column(
@@ -146,6 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 233, 33, 19)),
+                  ),
                 ),
               ),
             ),
@@ -154,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.movie_creation_outlined,
                             size: 80,
@@ -164,7 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             'No movies found!',
                             style: TextStyle(
-                              fontFamily: 'Poppins',
                               fontSize: 18,
                               color: Colors.grey,
                             ),
@@ -173,8 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 300,
                         childAspectRatio: 3 / 2,
                       ),
@@ -188,21 +187,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () => viewDetails(movie, context),
                               child: movie.imageUrl == null ||
                                       movie.imageUrl!.isEmpty
-                                  ? Image.asset(
-                                      'assets/images/default.png',
-                                      fit: BoxFit.cover,
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/popcorn1.png',
+                                        fit: BoxFit.cover,
+                                      ),
                                     )
-                                  : Image.network(
-                                      movie.imageUrl!,
-                                      fit: BoxFit.cover,
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.network(
+                                        movie.imageUrl!,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                             ),
                             footer: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8.0, vertical: 4.0),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(123, 0, 0, 0),
-                                borderRadius: const BorderRadius.only(
+                                color: Color.fromARGB(123, 0, 0, 0),
+                                borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8),
                                 ),
@@ -219,8 +224,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       maxLines: 1,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 17,
                                       ),
                                     ),
                                   ),
@@ -250,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 233, 33, 19),
+          backgroundColor: Color.fromARGB(255, 233, 33, 19),
           onPressed: () {
             Navigator.push(
               context,
