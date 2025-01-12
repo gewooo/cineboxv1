@@ -27,7 +27,7 @@ class _AddMoviesState extends State<AddMovies> {
     'Historical',
     'Musical',
     'Romance',
-    'Crime'
+    'Crimes'
   ];
 
   final List<String> statuses = ['To Watch', 'Watched'];

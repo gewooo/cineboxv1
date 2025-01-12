@@ -71,6 +71,4 @@ class DbHelper {
       whereArgs: [id],
     );
   }
-
-  getAllMovies() {}
 }
